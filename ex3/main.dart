@@ -5,8 +5,7 @@ StreamSubscription streamSubscription;
 
 void main() {
   eventHandler("Hello Flutter!");
-  Duration period = Duration(seconds: 2);
-  Stream stream = Stream.periodic(period,computation);
+  Stream stream = Stream.fromIterable(list);
   streamSubscription=stream.listen(
       eventHandler,
       onDone: () {
@@ -17,14 +16,6 @@ void main() {
       },
       cancelOnError: true
   );
-
-}
-
-computation(int i) {
-  if (i < list.length) {
-    return list[i];
-  }
-  streamSubscription.cancel();
 }
 
 eventHandler(eventValue) {
