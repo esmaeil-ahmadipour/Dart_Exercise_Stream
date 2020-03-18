@@ -24,7 +24,7 @@ computation(int i) {
   if (i < list.length) {
     return list[i];
   }
-  throw "Not Data!";
+  streamSubscription.cancel();
 }
 
 eventHandler(eventValue) {
