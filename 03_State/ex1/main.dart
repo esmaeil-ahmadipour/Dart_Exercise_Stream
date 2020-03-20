@@ -12,16 +12,28 @@ enum State {
 
 class StateMachine {
   State _state;
+  var eventLookup = Map<State, List<Event>>();
 
   StateMachine() {
     this._state = State.INIT;
+    eventLookup[State.INIT]=[Event.START];
+    eventLookup[State.STARTED]=[Event.GO, Event.STOP];
+    eventLookup[State.RUNNING]=[Event.PAUSE];
+    eventLookup[State.PAUSING]=[];
+    eventLookup[State.PAUSED]=[Event.STOP,Event.END];
+    eventLookup[State.STOPPED]=[Event.START,Event.END];
   }
 
   State getState() {
     return _state;
   }
 
-  void On(Event event) {
+  StateMachine On(Event event) {
+    if(!eventLookup[_state].contains(event)){
+      print('$event - Not A Valid Event For State $_state');
+      return this;
+    }
+
     var old = _state;
 
     switch (event) {
@@ -44,22 +56,31 @@ class StateMachine {
       default:
         {
           print("Unhandeled Event: $event");
+          return this;
+
         }
     }
     print("State {from:$old , to:$_state}");
+    return this;
+
 
   }
 }
 
 void main() {
   var stateMachine = StateMachine();
+//
+//  stateMachine.On(Event.START);
+//  print("State Is: ${stateMachine.getState()} \n");
+//
+//  stateMachine.On(Event.GO);
+//  print("State Is: ${stateMachine.getState()}\n");
+//
+//  stateMachine.On(Event.PAUSE);
+//  print("State Is: ${stateMachine.getState()}\n");
 
-  stateMachine.On(Event.START);
-  print("State Is: ${stateMachine.getState()} \n");
+stateMachine.On(Event.START).On(Event.GO);
+//stateMachine..On(Event.START)..On(Event.GO);
 
-  stateMachine.On(Event.GO);
-  print("State Is: ${stateMachine.getState()}\n");
-
-  stateMachine.On(Event.END);
-  print("State Is: ${stateMachine.getState()}\n");
+print(stateMachine.getState());
 }
