@@ -19,7 +19,7 @@ class CounterBloc {
 
   CounterBloc() {
     _state = State();
-    _streamController = StreamController<int>();
+    _streamController = StreamController<int>.broadcast();
   }
 
   Stream<int> getStream() {
@@ -54,9 +54,12 @@ void main() {
   var stateMachine = CounterBloc();
 
   stateMachine.getStream().listen((onData){
-    print("Listener ==> $onData");
+    print("Listener 1 ==> $onData");
   });
 
+  stateMachine.getStream().listen((onData){
+    print("Listener 2 ==> $onData");
+  });
 
   stateMachine.On(Event.INCREASE);
   stateMachine.On(Event.INCREASE);
