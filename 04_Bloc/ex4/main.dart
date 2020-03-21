@@ -70,11 +70,11 @@ class ShoppingCartBloc {
 void main() {
   var stateMachine = ShoppingCartBloc();
 
-  stateMachine.getStream().listen((onData) {
+ var subscribe1= stateMachine.getStream().listen((onData) {
     print("Item's Qty==> ${onData.length}");
   });
 
-  stateMachine.getStream().listen((onData) {
+  var subscribe2=stateMachine.getStream().listen((onData) {
     print("Cart Item's==> ");
     for (var i = 0; i < onData.length; ++i) {
       print("\t $i - ${onData[i]}");
@@ -85,6 +85,9 @@ void main() {
 
   stateMachine.On(
       Event.addItem, Item(name: "Banana", description: "One Box", price: 1.5));
+
+  subscribe1.cancel();
+  subscribe2.cancel();
 
   stateMachine.On(Event.removeAll);
 
@@ -97,4 +100,7 @@ void main() {
       Event.addItem, Item(name: "Apple", description: "One Kilo", price: 7.5));
 
   stateMachine.On(Event.removeItem, selectedItem);
+
+  //Note: Running Priority : 1-Task-queue , 2-MicroTask-queue , Event-queue
+  print("Main() Ending .. !");
 }
