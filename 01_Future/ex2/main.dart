@@ -33,5 +33,6 @@ void task2() {
 }
 
 void reward() {
+  task2();
   print("Enjoying Reward ! .. ${DateTime.now()} \n");
 }
